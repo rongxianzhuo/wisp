@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wisp"
+version = "0.1.0"
+description = "A lightweight client agent that enables Ruby server to execute commands on user machines"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+    {name = "Ruby Team"}
+]
+keywords = ["agent", "ruby", "client", "websocket", "remote-execution"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+dependencies = [
+    "websockets>=12.0",
+    "aiofiles>=23.0.0",
+]
+
+[project.scripts]
+wisp = "wisp.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/rongxianzhuo/wisp"
+Repository = "https://github.com/rongxianzhuo/wisp"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["wisp*"]
