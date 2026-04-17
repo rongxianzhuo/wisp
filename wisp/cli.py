@@ -125,7 +125,7 @@ Examples:
     return parser.parse_args()
 
 
-async def main():
+async def async_main():
     args = parse_args()
     
     if args.verbose:
@@ -172,5 +172,19 @@ async def main():
         sys.exit(1)
 
 
+def main():
+    """Entry point that handles both asyncio and non-asyncio Python versions"""
+    try:
+        # Try Python 3.7+ approach
+        asyncio.run(async_main())
+    except AttributeError:
+        # Fallback for older Python versions
+        loop = asyncio.get_event_loop()
+        try:
+            loop.run_until_complete(async_main())
+        finally:
+            loop.close()
+
+
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
