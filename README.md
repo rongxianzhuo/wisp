@@ -5,33 +5,42 @@ A lightweight client agent that enables Ruby server to execute commands on user 
 ## Installation
 
 ```bash
-pip install -r requirements.txt
+# Clone the repository
+git clone git@github.com:rongxianzhuo/wisp.git
+cd wisp
+
+# Install in development mode (recommended)
+pip install -e .
 ```
 
 ## Usage
 
-### Environment Variables (Recommended)
+### Environment Variables
+
+Set the following environment variables:
 
 ```bash
+# Required
 export WISP_SERVER=ws://ruby.example.com
 export WISP_USER_ID=your_user_id
 export WISP_TOKEN=your_jwt_token
-wisp
-```
 
-### Optional Settings
-
-```bash
+# Optional
 export WISP_DEVICE_NAME="My MacBook Pro"  # Custom device name
-export WISP_DEVICE_ID="macbook-001"        # Custom device ID (auto-generated if not set)
+export WISP_DEVICE_ID="macbook-001"       # Custom device ID
 ```
 
-### Command Line Arguments
+On Windows (PowerShell):
+```powershell
+$env:WISP_SERVER="ws://ruby.example.com"
+$env:WISP_USER_ID="your_user_id"
+$env:WISP_TOKEN="your_jwt_token"
+```
 
-You can also override settings via command line:
+### Run Wisp
 
 ```bash
-wisp --server ws://ruby.example.com --user-id your_user_id --token your_token
+wisp
 ```
 
 ## Features
