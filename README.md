@@ -2,13 +2,6 @@
 
 A lightweight client agent that enables Ruby server to execute commands on user machines.
 
-## Features
-
-- **File Operations**: Read and write files on the client machine
-- **Shell Commands**: Execute shell commands
-- **Auto Reconnect**: Automatically reconnects when disconnected
-- **Multiple Devices**: One user can run multiple Wisp instances on different devices
-
 ## Installation
 
 ```bash
@@ -17,23 +10,36 @@ pip install -r requirements.txt
 
 ## Usage
 
+### Environment Variables (Recommended)
+
 ```bash
-python -m wisp.cli --server ws://ruby.example.com --user-id your_user_id --token your_token
+export WISP_SERVER=ws://ruby.example.com
+export WISP_USER_ID=your_user_id
+export WISP_TOKEN=your_jwt_token
+wisp
 ```
 
-### Options
+### Optional Settings
 
-| Option | Description |
-|--------|-------------|
-| `--server`, `-s` | Ruby WebSocket server URL |
-| `--user-id`, `-u` | User ID for authentication |
-| `--token`, `-t` | JWT token for authentication |
-| `--device-id` | Custom device ID (auto-generated if not provided) |
-| `--device-name` | Custom device name |
-| `--capabilities` | Capabilities to advertise (default: read_file write_file shell) |
-| `--no-auto-reconnect` | Disable auto-reconnect |
-| `--reconnect-interval` | Seconds between reconnection attempts (default: 5) |
-| `--verbose`, `-v` | Enable verbose logging |
+```bash
+export WISP_DEVICE_NAME="My MacBook Pro"  # Custom device name
+export WISP_DEVICE_ID="macbook-001"        # Custom device ID (auto-generated if not set)
+```
+
+### Command Line Arguments
+
+You can also override settings via command line:
+
+```bash
+wisp --server ws://ruby.example.com --user-id your_user_id --token your_token
+```
+
+## Features
+
+- **File Operations**: Read and write files on the client machine
+- **Shell Commands**: Execute shell commands
+- **Auto Reconnect**: Automatically reconnects when disconnected
+- **Multiple Devices**: One user can run multiple Wisp instances on different devices
 
 ## How It Works
 
