@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 """
 Wisp CLI - Command line interface for Wisp client
-
-Usage:
-    wisp --server ws://ruby.example.com
 """
 
 import argparse
@@ -30,14 +27,14 @@ def parse_args():
         epilog="""
 Examples:
     # Using command line arguments
-    wisp --server ws://ruby.example.com
+    wisp
 """
     )
     
     parser.add_argument(
         "--server", "-s",
-        default='ws://127.0.0.1:5003',
-        help="Ruby WebSocket server URL (e.g., ws://ruby.example.com)"
+        default='ws://ruby.rongxianzhuo.com',
+        help="Ruby WebSocket server URL"
     )
     
     parser.add_argument(
@@ -55,8 +52,8 @@ Examples:
     parser.add_argument(
         "--reconnect-interval",
         type=int,
-        default=5,
-        help="Seconds to wait before reconnecting (default: 5)"
+        default=10,
+        help="Seconds to wait before reconnecting (default: 10)"
     )
     
     parser.add_argument(
