@@ -59,10 +59,10 @@ Examples:
     )
     
     parser.add_argument(
-        "--capabilities",
+        "--information",
         nargs="+",
-        default=["read_file", "write_file", "shell"],
-        help="Capabilities to advertise (default: read_file write_file shell)"
+        default='No more information',
+        help="Information about this wisp"
     )
     
     parser.add_argument(
@@ -105,7 +105,7 @@ async def async_main():
     logger.info(f"Server: {args.server}")
     logger.info(f"User ID: {args.user_id}")
     logger.info(f"Wisp: {args.wisp_name or 'auto-generated'}")
-    logger.info(f"Capabilities: {args.capabilities}")
+    logger.info(f"Information: {args.information}")
     
     # Create client
     client = WispClient(
@@ -114,7 +114,7 @@ async def async_main():
         token=args.token,
         wisp_id='',
         wisp_name=args.wisp_name,
-        capabilities=args.capabilities,
+        information=args.information,
         auto_reconnect=not args.no_auto_reconnect,
         reconnect_interval=args.reconnect_interval,
     )

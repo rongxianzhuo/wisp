@@ -15,28 +15,6 @@ pip install -e .
 
 ## Usage
 
-### Environment Variables
-
-Set the following environment variables:
-
-```bash
-# Required
-export WISP_SERVER=ws://ruby.example.com
-export WISP_USER_ID=your_user_id
-export WISP_TOKEN=your_jwt_token
-
-# Optional
-export WISP_DEVICE_NAME="My MacBook Pro"  # Custom wisp name
-export WISP_DEVICE_ID="macbook-001"       # Custom wisp ID
-```
-
-On Windows (PowerShell):
-```powershell
-$env:WISP_SERVER="ws://ruby.example.com"
-$env:WISP_USER_ID="your_user_id"
-$env:WISP_TOKEN="your_jwt_token"
-```
-
 ### Run Wisp
 
 ```bash
@@ -64,7 +42,7 @@ User ←→ Ruby (Server) ←→ Wisp (Client)
 
 1. Wisp connects to Ruby server via WebSocket
 2. Wisp authenticates with user_id and token
-3. Wisp registers its capabilities
+3. Wisp registers its information
 4. Ruby can now send commands to Wisp
 5. Wisp executes commands locally and returns results
 
@@ -73,7 +51,7 @@ User ←→ Ruby (Server) ←→ Wisp (Client)
 ### Registration
 
 ```json
-{"type": "register", "wisp_id": "xxx", "wisp_name": "xxx", "capabilities": ["read_file", "write_file", "shell"]}
+{"type": "register", "wisp_id": "xxx", "wisp_name": "xxx", "information": "This wisp is running on my private computer ..."}
 ```
 
 ### Ruby → Wisp Commands

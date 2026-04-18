@@ -1,6 +1,6 @@
 """
 File operations for Wisp
-Provides read and write capabilities for local filesystem
+Provides read and write information for local filesystem
 """
 
 import aiofiles

@@ -24,7 +24,7 @@ class WispClient:
         token: str,
         wisp_id: Optional[str] = None,
         wisp_name: Optional[str] = None,
-        capabilities: Optional[list] = None,
+        information: Optional[str] = None,
         auto_reconnect: bool = True,
         reconnect_interval: int = 5,
     ):
@@ -33,7 +33,7 @@ class WispClient:
         self.token = token
         self.wisp_id = wisp_id or self._generate_wisp_id()
         self.wisp_name = wisp_name or self._get_default_wisp_name()
-        self.capabilities = capabilities or ["read_file", "write_file", "shell"]
+        self.information = information or 'No more information'
         self.auto_reconnect = auto_reconnect
         self.reconnect_interval = reconnect_interval
         
@@ -69,7 +69,7 @@ class WispClient:
                 "type": "register",
                 "wisp_id": self.wisp_id,
                 "wisp_name": self.wisp_name,
-                "capabilities": self.capabilities,
+                "information": self.information,
             }))
             
             # Wait for acknowledgment
