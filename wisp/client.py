@@ -137,7 +137,7 @@ class WispClient:
             # Send result back
             result_str = result.get("result")
             if not result_str:
-                result_str = result.get("stdout", 'Empty stdout') if result.get("success", False) else result.get("result", 'Empty stderr')
+                result_str = result.get("stdout", 'Empty stdout') if result.get("success", False) else result.get("stderr", 'execute command failed with empty stderr')
             response = {
                 "type": "result",
                 "message_id": message_id,
