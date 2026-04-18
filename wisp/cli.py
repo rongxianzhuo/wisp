@@ -3,7 +3,7 @@
 Wisp CLI - Command line interface for Wisp client
 
 Usage:
-    wisp --server ws://ruby.example.com --user-id xxx --token yyy
+    wisp --server ws://ruby.example.com
 """
 
 import argparse
@@ -30,7 +30,7 @@ def parse_args():
         epilog="""
 Examples:
     # Using command line arguments
-    wisp --server ws://ruby.example.com --user-id user123 --token abc123
+    wisp --server ws://ruby.example.com
 """
     )
     
@@ -41,28 +41,9 @@ Examples:
     )
     
     parser.add_argument(
-        "--user-id", "-u",
-        default='user',
-        help="User ID for authentication"
-    )
-    
-    parser.add_argument(
-        "--token", "-t",
-        default='none',
-        help="JWT token for authentication"
-    )
-    
-    parser.add_argument(
         "--wisp-name",
         default='My Computer',
         help="Custom wisp name (e.g., 'My MacBook Pro')"
-    )
-    
-    parser.add_argument(
-        "--information",
-        nargs="+",
-        default='No more information',
-        help="Information about this wisp"
     )
     
     parser.add_argument(
@@ -103,11 +84,8 @@ async def async_main():
     # Create client
     client = WispClient(
         server_url=args.server,
-        user_id=args.user_id,
-        token=args.token,
         wisp_id='',
         wisp_name=args.wisp_name,
-        information=args.information,
         auto_reconnect=not args.no_auto_reconnect,
         reconnect_interval=args.reconnect_interval,
     )

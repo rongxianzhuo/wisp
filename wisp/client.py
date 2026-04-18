@@ -6,6 +6,7 @@ Handles connection to Ruby server and command execution
 import asyncio
 import json
 import logging
+import os
 import platform
 import uuid
 import websockets
@@ -20,22 +21,21 @@ class WispClient:
     def __init__(
         self,
         server_url: str,
-        user_id: str,
-        token: str,
         wisp_id: Optional[str] = None,
         wisp_name: Optional[str] = None,
-        information: Optional[str] = None,
         auto_reconnect: bool = True,
-        reconnect_interval: int = 5,
+        reconnect_interval: int = 10,
     ):
         self.server_url = server_url.rstrip("/")
-        self.user_id = user_id
-        self.token = token
+        self.user_id = os.environ.get('RUBY_USER_ID', 'user')
+        self.token = os.environ.get('RUBY_USER_TOKEN', 'none')
         self.wisp_id = wisp_id or self._generate_wisp_id()
         self.wisp_name = wisp_name or self._get_default_wisp_name()
-        self.information = information or 'No more information'
         self.auto_reconnect = auto_reconnect
         self.reconnect_interval = reconnect_interval
+        with open('../information.txt', 'r', encoding='utf-8') as f:
+            self.information = f.read()
+
         
         self.ws = None
         self.connected = False
