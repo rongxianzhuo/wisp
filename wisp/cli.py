@@ -3,13 +3,6 @@
 Wisp CLI - Command line interface for Wisp client
 
 Usage:
-    # From environment variables (recommended)
-    export WISP_SERVER=ws://ruby.example.com
-    export WISP_USER_ID=xxx
-    export WISP_TOKEN=yyy
-    wisp
-
-    # Or from command line arguments
     wisp --server ws://ruby.example.com --user-id xxx --token yyy
 """
 
@@ -30,64 +23,39 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def get_env_or_arg(env_var: str, arg_value, required: bool = True):
-    """Get value from environment variable or command line argument"""
-    env_value = os.environ.get(env_var)
-    if env_value:
-        return env_value
-    if arg_value is not None:
-        return arg_value
-    if required:
-        raise ValueError(f"Missing required value: set {env_var} environment variable or provide --{env_var.lower().replace('_', '-')}")
-    return None
-
-
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Wisp - Client agent for Ruby",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-    # Using environment variables (recommended)
-    export WISP_SERVER=ws://ruby.example.com
-    export WISP_USER_ID=user123
-    export WISP_TOKEN=abc123
-    wisp
-
     # Using command line arguments
     wisp --server ws://ruby.example.com --user-id user123 --token abc123
-    
-    # Mix: environment variables for sensitive data, args for options
-    export WISP_SERVER=ws://ruby.example.com
-    export WISP_USER_ID=user123
-    export WISP_TOKEN=abc123
-    wisp --device-name "My MacBook" --verbose
-        """
+"""
     )
     
     parser.add_argument(
         "--server", "-s",
+        default='ws://127.0.0.1:5003',
         help="Ruby WebSocket server URL (e.g., ws://ruby.example.com)"
     )
     
     parser.add_argument(
         "--user-id", "-u",
+        default='user',
         help="User ID for authentication"
     )
     
     parser.add_argument(
         "--token", "-t",
+        default='none',
         help="JWT token for authentication"
     )
     
     parser.add_argument(
-        "--device-id",
-        help="Custom device ID (auto-generated if not provided)"
-    )
-    
-    parser.add_argument(
-        "--device-name",
-        help="Custom device name (e.g., 'My MacBook Pro')"
+        "--wisp-name",
+        default='My Computer',
+        help="Custom wisp name (e.g., 'My MacBook Pro')"
     )
     
     parser.add_argument(
@@ -132,29 +100,20 @@ async def async_main():
         logging.getLogger().setLevel(logging.DEBUG)
         logger.debug("Verbose logging enabled")
     
-    # Get credentials from environment variables or command line arguments
-    server = get_env_or_arg("WISP_SERVER", args.server)
-    user_id = get_env_or_arg("WISP_USER_ID", args.user_id)
-    token = get_env_or_arg("WISP_TOKEN", args.token)
-    
-    # Optional settings from environment variables
-    device_id = os.environ.get("WISP_DEVICE_ID") or args.device_id
-    device_name = os.environ.get("WISP_DEVICE_NAME") or args.device_name
-    
     # Show which values came from environment vs arguments
     logger.info(f"Starting Wisp v{__version__}")
-    logger.info(f"Server: {server}")
-    logger.info(f"User ID: {user_id}")
-    logger.info(f"Device: {device_name or 'auto-generated'}")
+    logger.info(f"Server: {args.server}")
+    logger.info(f"User ID: {args.user_id}")
+    logger.info(f"Wisp: {args.wisp_name or 'auto-generated'}")
     logger.info(f"Capabilities: {args.capabilities}")
     
     # Create client
     client = WispClient(
-        server_url=server,
-        user_id=user_id,
-        token=token,
-        device_id=device_id,
-        device_name=device_name,
+        server_url=args.server,
+        user_id=args.user_id,
+        token=args.token,
+        wisp_id='',
+        wisp_name=args.wisp_name,
         capabilities=args.capabilities,
         auto_reconnect=not args.no_auto_reconnect,
         reconnect_interval=args.reconnect_interval,

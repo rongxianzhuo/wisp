@@ -22,8 +22,8 @@ class WispClient:
         server_url: str,
         user_id: str,
         token: str,
-        device_id: Optional[str] = None,
-        device_name: Optional[str] = None,
+        wisp_id: Optional[str] = None,
+        wisp_name: Optional[str] = None,
         capabilities: Optional[list] = None,
         auto_reconnect: bool = True,
         reconnect_interval: int = 5,
@@ -31,8 +31,8 @@ class WispClient:
         self.server_url = server_url.rstrip("/")
         self.user_id = user_id
         self.token = token
-        self.device_id = device_id or self._generate_device_id()
-        self.device_name = device_name or self._get_default_device_name()
+        self.wisp_id = wisp_id or self._generate_wisp_id()
+        self.wisp_name = wisp_name or self._get_default_wisp_name()
         self.capabilities = capabilities or ["read_file", "write_file", "shell"]
         self.auto_reconnect = auto_reconnect
         self.reconnect_interval = reconnect_interval
@@ -41,12 +41,12 @@ class WispClient:
         self.connected = False
         self._command_handlers = {}
         
-    def _generate_device_id(self) -> str:
-        """Generate a unique device ID based on platform and uuid"""
+    def _generate_wisp_id(self) -> str:
+        """Generate a unique wisp ID based on platform and uuid"""
         return f"{platform.system().lower()}-{uuid.getnode():012x}"
     
-    def _get_default_device_name(self) -> str:
-        """Get a default device name based on platform"""
+    def _get_default_wisp_name(self) -> str:
+        """Get a default wisp name based on platform"""
         system = platform.system()
         if system == "Darwin":
             return f"Mac {platform.node()}"
@@ -67,8 +67,8 @@ class WispClient:
             # Send registration message
             await self.ws.send(json.dumps({
                 "type": "register",
-                "device_id": self.device_id,
-                "device_name": self.device_name,
+                "wisp_id": self.wisp_id,
+                "wisp_name": self.wisp_name,
                 "capabilities": self.capabilities,
             }))
             
