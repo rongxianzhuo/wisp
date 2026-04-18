@@ -8,7 +8,7 @@ import subprocess
 import shlex
 
 
-async def run_command(cmd: str, timeout: int = 30) -> dict:
+async def run_command(cmd: str, timeout: int = 600) -> dict:
     """
     Execute shell command
     
@@ -39,24 +39,22 @@ async def run_command(cmd: str, timeout: int = 30) -> dict:
             await process.wait()
             return {
                 "success": False,
-                "result": f"Command timed out after {timeout} seconds",
                 "returncode": -1,
                 "stdout": "",
-                "stderr": ""
+                "stderr": f"Command timed out after {timeout} seconds"
             }
         
         return {
             "success": process.returncode == 0,
             "returncode": process.returncode,
-            "result": stdout.decode('utf-8', errors='replace'),
+            "stdout": stdout.decode('utf-8', errors='replace'),
             "stderr": stderr.decode('utf-8', errors='replace'),
         }
         
     except Exception as e:
         return {
             "success": False,
-            "result": str(e),
             "returncode": -1,
             "stdout": "",
-            "stderr": ""
+            "stderr": str(e)
         }

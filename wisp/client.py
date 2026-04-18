@@ -140,7 +140,7 @@ class WispClient:
                 "message_id": message_id,
                 "command": cmd_type,
                 "success": result.get("success", False),
-                "result": result.get("result"),
+                "result": result.get("stdout", 'Empty stdout') if result.get("success", False) else result.get("result", 'Empty stderr'),
             }
             
             await self.ws.send(json.dumps(response))
