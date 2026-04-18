@@ -121,16 +121,18 @@ class WispClient:
         """Handle incoming command from Ruby"""
         cmd_type = command.get("command")
         message_id = command.get("message_id")
+        print(command)
         
         try:
             if cmd_type == "read_file":
-                result = await self._execute_read_file(command)
+                result = await self._execute_read_file(command.get('args'))
             elif cmd_type == "write_file":
-                result = await self._execute_write_file(command)
+                result = await self._execute_write_file(command.get('args'))
             elif cmd_type == "shell":
-                result = await self._execute_shell(command)
+                result = await self._execute_shell(command.get('args'))
             else:
-                result = {"success": False, "error": f"Unknown command: {cmd_type}"}
+                result = {"success": False, "result": f"Unknown command: {cmd_type}"}
+            print(result)
             
             # Send result back
             response = {
@@ -138,11 +140,8 @@ class WispClient:
                 "message_id": message_id,
                 "command": cmd_type,
                 "success": result.get("success", False),
-                "data": result.get("data"),
+                "result": result.get("result"),
             }
-            
-            if result.get("error"):
-                response["error"] = result["error"]
             
             await self.ws.send(json.dumps(response))
             
@@ -154,13 +153,14 @@ class WispClient:
                 "command": cmd_type,
                 "error": str(e),
             }))
+            print(e)
     
     async def _execute_read_file(self, command: dict) -> dict:
         """Read file from local filesystem"""
         from wisp.commands.file_ops import read_file
         path = command.get("path")
         if not path:
-            return {"success": False, "error": "Missing path parameter"}
+            return {"success": False, "result": "Missing path parameter"}
         return await read_file(path)
     
     async def _execute_write_file(self, command: dict) -> dict:
@@ -169,7 +169,7 @@ class WispClient:
         path = command.get("path")
         content = command.get("content", "")
         if not path:
-            return {"success": False, "error": "Missing path parameter"}
+            return {"success": False, "result": "Missing path parameter"}
         return await write_file(path, content)
     
     async def _execute_shell(self, command: dict) -> dict:
@@ -177,7 +177,7 @@ class WispClient:
         from wisp.commands.shell import run_command
         cmd = command.get("cmd")
         if not cmd:
-            return {"success": False, "error": "Missing cmd parameter"}
+            return {"success": False, "result": "Missing cmd parameter"}
         return await run_command(cmd)
     
     async def run(self):

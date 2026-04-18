@@ -39,7 +39,7 @@ async def run_command(cmd: str, timeout: int = 30) -> dict:
             await process.wait()
             return {
                 "success": False,
-                "error": f"Command timed out after {timeout} seconds",
+                "result": f"Command timed out after {timeout} seconds",
                 "returncode": -1,
                 "stdout": "",
                 "stderr": ""
@@ -48,14 +48,14 @@ async def run_command(cmd: str, timeout: int = 30) -> dict:
         return {
             "success": process.returncode == 0,
             "returncode": process.returncode,
-            "stdout": stdout.decode('utf-8', errors='replace'),
+            "result": stdout.decode('utf-8', errors='replace'),
             "stderr": stderr.decode('utf-8', errors='replace'),
         }
         
     except Exception as e:
         return {
             "success": False,
-            "error": str(e),
+            "result": str(e),
             "returncode": -1,
             "stdout": "",
             "stderr": ""

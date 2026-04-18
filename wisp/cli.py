@@ -100,13 +100,6 @@ async def async_main():
         logging.getLogger().setLevel(logging.DEBUG)
         logger.debug("Verbose logging enabled")
     
-    # Show which values came from environment vs arguments
-    logger.info(f"Starting Wisp v{__version__}")
-    logger.info(f"Server: {args.server}")
-    logger.info(f"User ID: {args.user_id}")
-    logger.info(f"Wisp: {args.wisp_name or 'auto-generated'}")
-    logger.info(f"Information: {args.information}")
-    
     # Create client
     client = WispClient(
         server_url=args.server,
