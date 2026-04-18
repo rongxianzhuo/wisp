@@ -33,7 +33,7 @@ Examples:
     
     parser.add_argument(
         "--server", "-s",
-        default='ws://ruby.rongxianzhuo.com',
+        default='wss://ruby.rongxianzhuo.com',
         help="Ruby WebSocket server URL"
     )
     
