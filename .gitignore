@@ -1,3 +1,4 @@
 .idea
 *.pyc
 information.txt
+settings.json

@@ -6,7 +6,6 @@ Wisp CLI - Command line interface for Wisp client
 import argparse
 import asyncio
 import logging
-import os
 import sys
 
 from wisp import __version__

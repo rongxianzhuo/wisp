@@ -6,6 +6,7 @@ Handles connection to Ruby server and command execution
 import asyncio
 import json
 import logging
+import config
 import os
 import platform
 import uuid
@@ -27,8 +28,8 @@ class WispClient:
         reconnect_interval: int = 10,
     ):
         self.server_url = server_url.rstrip("/")
-        self.user_id = os.environ.get('RUBY_USER_ID', 'user')
-        self.token = os.environ.get('RUBY_USER_TOKEN', 'none')
+        self.user_id = config.user_id()
+        self.token = config.user_token()
         self.wisp_id = wisp_id or self._generate_wisp_id()
         self.wisp_name = wisp_name or self._get_default_wisp_name()
         self.auto_reconnect = auto_reconnect
