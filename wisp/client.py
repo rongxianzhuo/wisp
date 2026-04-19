@@ -6,7 +6,7 @@ Handles connection to Ruby server and command execution
 import asyncio
 import json
 import logging
-import config
+from wisp import config
 import os
 import platform
 import uuid

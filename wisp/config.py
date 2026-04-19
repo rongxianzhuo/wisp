@@ -1,8 +1,11 @@
 import json
 
 
-with open('../settings.json', 'r', encoding='utf-8') as file:
-    settings: dict = json.loads(file.read())
+try:
+    with open('../settings.json', 'r', encoding='utf-8') as file:
+        settings: dict = json.loads(file.read())
+except Exception as e:
+    settings = {}
 
 
 def user_id():
