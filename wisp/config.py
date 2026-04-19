@@ -2,7 +2,7 @@ import json
 
 
 try:
-    with open('../settings.json', 'r', encoding='utf-8') as file:
+    with open('settings.json', 'r', encoding='utf-8') as file:
         settings: dict = json.loads(file.read())
 except Exception as e:
     settings = {}

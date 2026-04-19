@@ -34,7 +34,7 @@ class WispClient:
         self.wisp_name = wisp_name or self._get_default_wisp_name()
         self.auto_reconnect = auto_reconnect
         self.reconnect_interval = reconnect_interval
-        with open('../information.txt', 'r', encoding='utf-8') as f:
+        with open('information.txt', 'r', encoding='utf-8') as f:
             self.information = f.read()
 
         
