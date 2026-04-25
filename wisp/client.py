@@ -34,8 +34,6 @@ class WispClient:
         self.wisp_name = wisp_name or self._get_default_wisp_name()
         self.auto_reconnect = auto_reconnect
         self.reconnect_interval = reconnect_interval
-        with open('information.txt', 'r', encoding='utf-8') as f:
-            self.information = f.read()
 
         
         self.ws = None
@@ -70,7 +68,27 @@ class WispClient:
                 "type": "register",
                 "wisp_id": self.wisp_id,
                 "wisp_name": self.wisp_name,
-                "information": self.information,
+                "functions": {
+                    self.read_file.__name__: {
+                        "description": "You can use this tool to read a text file on user's private computer.",
+                        "arguments": {
+                            "file_path": "The file path you want to read."
+                        }
+                    },
+                    self.write_file.__name__: {
+                        "description": "You can use this tool to create or write a text file on user's private computer.",
+                        "arguments": {
+                            "file_path": "The file path you want to write.",
+                            "content": "The full content you want to write into file."
+                        }
+                    },
+                    self.run_shell_command.__name__: {
+                        "description": "You can use this tool to run execute a shell command on user's private computer.",
+                        "arguments": {
+                            "cmd": "one line shell command"
+                        }
+                    }
+                }
             }))
             
             # Wait for acknowledgment
@@ -120,19 +138,16 @@ class WispClient:
     
     async def _handle_command(self, command: dict):
         """Handle incoming command from Ruby"""
-        cmd_type = command.get("command")
+        function_name = command.get("function_name")
         message_id = command.get("message_id")
         print(command)
         
         try:
-            if cmd_type == "read_file":
-                result = await self._execute_read_file(command.get('args'))
-            elif cmd_type == "write_file":
-                result = await self._execute_write_file(command.get('args'))
-            elif cmd_type == "shell":
-                result = await self._execute_shell(command.get('args'))
+            function_tool = getattr(self, function_name, None)
+            if function_tool:
+                result = await function_tool(command.get('args'))
             else:
-                result = {"success": False, "result": f"Unknown command: {cmd_type}"}
+                result = {"success": False, "result": f"Unknown command: {function_name}"}
             print(result)
             
             # Send result back
@@ -142,7 +157,7 @@ class WispClient:
             response = {
                 "type": "result",
                 "message_id": message_id,
-                "command": cmd_type,
+                "function_name": function_name,
                 "success": result.get("success", False),
                 "result": result_str,
             }
@@ -154,32 +169,32 @@ class WispClient:
             await self.ws.send(json.dumps({
                 "type": "error",
                 "message_id": message_id,
-                "command": cmd_type,
+                "function_name": function_name,
                 "error": str(e),
             }))
             print(e)
     
-    async def _execute_read_file(self, command: dict) -> dict:
+    async def read_file(self, args: dict) -> dict:
         """Read file from local filesystem"""
         from wisp.commands.file_ops import read_file
-        path = command.get("path")
+        path = args.get("file_path")
         if not path:
             return {"success": False, "result": "Missing path parameter"}
         return await read_file(path)
     
-    async def _execute_write_file(self, command: dict) -> dict:
+    async def write_file(self, args: dict) -> dict:
         """Write file to local filesystem"""
         from wisp.commands.file_ops import write_file
-        path = command.get("path")
-        content = command.get("content", "")
+        path = args.get("file_path")
+        content = args.get("content", "")
         if not path:
             return {"success": False, "result": "Missing path parameter"}
         return await write_file(path, content)
     
-    async def _execute_shell(self, command: dict) -> dict:
+    async def run_shell_command(self, args: dict) -> dict:
         """Execute shell command"""
         from wisp.commands.shell import run_command
-        cmd = command.get("cmd")
+        cmd = args.get("cmd")
         if not cmd:
             return {"success": False, "result": "Missing cmd parameter"}
         return await run_command(cmd)
