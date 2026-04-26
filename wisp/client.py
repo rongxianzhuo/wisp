@@ -49,10 +49,6 @@ class WispClient:
         system = platform.system()
         if system == "Darwin":
             return f"Mac {platform.node()}"
-        elif system == "Linux":
-            return f"Linux {platform.node()}"
-        elif system == "Windows":
-            return f"Windows {platform.node()}"
         return f"{system} {platform.node()}"
     
     async def connect(self) -> bool:
@@ -70,20 +66,20 @@ class WispClient:
                 "wisp_name": self.wisp_name,
                 "functions": {
                     self.read_file.__name__: {
-                        "description": "You can use this tool to read a text file on user's private computer.",
+                        "description": f"You can use this tool to read a text file on {self.wisp_name}.",
                         "arguments": {
                             "file_path": "The file path you want to read."
                         }
                     },
                     self.write_file.__name__: {
-                        "description": "You can use this tool to create or write a text file on user's private computer.",
+                        "description": f"You can use this tool to create or write a text file on {self.wisp_name}.",
                         "arguments": {
                             "file_path": "The file path you want to write.",
                             "content": "The full content you want to write into file."
                         }
                     },
                     self.run_shell_command.__name__: {
-                        "description": "You can use this tool to run execute a shell command on user's private computer.",
+                        "description": f"You can use this tool to run execute a shell command on {self.wisp_name}.",
                         "arguments": {
                             "cmd": "one line shell command"
                         }

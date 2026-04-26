@@ -1,3 +1,4 @@
+import os
 import json
 
 
@@ -9,7 +10,7 @@ except Exception as e:
 
 
 def user_id():
-    return settings.get('user_id', 'user')
+    return settings.get('user_id', os.getenv("WISP_USER_ID", "user"))
 
 
 def user_token():
