@@ -27,6 +27,7 @@ async def run_command(cmd: str, timeout: int = 600) -> dict:
             cmd,
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
+            cwd="/home"
         )
         
         try:
