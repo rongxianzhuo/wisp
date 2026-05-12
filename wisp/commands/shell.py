@@ -4,8 +4,7 @@ Provides ability to run shell commands
 """
 
 import asyncio
-import subprocess
-import shlex
+import os
 
 
 async def run_command(cmd: str, timeout: int = 600) -> dict:
@@ -27,6 +26,7 @@ async def run_command(cmd: str, timeout: int = 600) -> dict:
             cmd,
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
+            cwd=os.path.expanduser('~')
         )
         
         try:
