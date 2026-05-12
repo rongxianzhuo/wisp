@@ -9,7 +9,7 @@ import os
 from pathlib import Path
 
 
-async def read_file(path: str, max_size: int = 1024 * 1024) -> dict:
+async def read_file(path: str, max_size: int = 40000) -> dict:
     """
     Read file from local filesystem
     
@@ -29,17 +29,15 @@ async def read_file(path: str, max_size: int = 1024 * 1024) -> dict:
         if not await aiofiles.os.path.isfile(path):
             return {"success": False, "result": f"Not a file: {path}"}
         
-        # Security: check file size
-        stat = await aiofiles.os.stat(path)
-        if stat.st_size > max_size:
-            return {
-                "success": False, 
-                "result": f"File too large: {stat.st_size} bytes (max {max_size})"
-            }
-        
         # Read file
         async with aiofiles.open(path, 'r', encoding='utf-8') as f:
             content = await f.read()
+
+        if len(content) > max_size:
+            return {
+                "success": False,
+                "result": f"The file is too large, only loading the first {max_size} chars.\n{content}"
+            }
         
         return {"success": True, "result": content}
         
