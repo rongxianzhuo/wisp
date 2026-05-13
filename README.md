@@ -11,6 +11,7 @@ cd wisp
 
 # Install in development mode (recommended)
 pip install -e .
+export WISP_USER_ID="xxx"
 ```
 
 ## Usage
